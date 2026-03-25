@@ -70,7 +70,30 @@ class Matter3Iterator(Iterator):
             return student
         raise StopIteration
 
+class Matter4Iterator(Iterator):
+    def __init__(self, students):
+        self._sorted_students = sorted(students, key=lambda s: s.grades.get("Anglais", 0), reverse=True)
+        self._index = 0
 
+    def __next__(self):
+        if self._index < len(self._sorted_students):
+            student = self._sorted_students[self._index]
+            self._index += 1
+            return student
+        raise StopIteration
+
+def add_iter_matter_4(cls):
+    """
+    Décorateur de classe qui injecte la méthode iter_matter_4
+    dans la classe SchoolClass.
+    """
+    def iter_matter_4(self):
+        return Matter4Iterator(self.students)
+    
+    cls.iter_matter_4 = iter_matter_4
+    return cls
+
+@add_iter_matter_4
 class SchoolClass(Iterable):
     def __init__(self):
         self.students = []
@@ -158,3 +181,8 @@ for student in school_class.iter_matter_3():
 print("--- Vérification de la 4ème matière ajoutée par le décorateur ---")
 for student in school_class.students: # parcours brut
     print(f"{student.name} a {student.grades.get('Anglais')} en Anglais. (Moyenne automatiquement recalculée à {student.average:.2f})")
+
+# Parcours via l'itérateur injecté par décorateur (Dernière question)
+print("--- Parcours via l'itérateur injecté (Matière 4 - Anglais) ---")
+for student in school_class.iter_matter_4():
+    print(f"{student.name} : {student.grades.get('Anglais')} en Anglais")
