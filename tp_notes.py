@@ -43,6 +43,18 @@ class SchoolClass:
         for student in sorted_students:
             print(f"{student.name} : {student.grades['Mathématiques']}")
 
+    def rank_matter_2(self):
+        # Tri décroissant pour la 2ème matière
+        sorted_students = sorted(self.students, key=lambda s: s.grades["Physique"], reverse=True)
+        for student in sorted_students:
+            print(f"{student.name} : {student.grades['Physique']}")
+
+    def rank_matter_3(self):
+        # Tri décroissant pour la 3ème matière
+        sorted_students = sorted(self.students, key=lambda s: s.grades["Informatique"], reverse=True)
+        for student in sorted_students:
+            print(f"{student.name} : {student.grades['Informatique']}")
+
 
 school_class = SchoolClass()
 school_class.add_student(Student('J', 10, 12, 13))
@@ -54,3 +66,7 @@ school_class.display_rankings()
 
 # Appel à la méthode de la question 3
 school_class.rank_matter_1()
+
+# Appels aux méthodes de la question 4
+school_class.rank_matter_2()
+school_class.rank_matter_3()
