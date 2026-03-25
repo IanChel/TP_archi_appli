@@ -1,5 +1,22 @@
 from collections.abc import Iterable, Iterator
 
+def add_matter_4(cls):
+    """
+    Décorateur de classe qui modifie le constructeur
+    pour ajouter systématiquement une 4ème matière à tous les étudiants.
+    """
+    original_init = cls.__init__
+
+    def new_init(self, *args, **kwargs):
+        # Récupère une note optionnelle, sinon met 10 par défaut respectant l'énoncé
+        matter_4_grade = kwargs.pop('matter_4_grade', 10)
+        original_init(self, *args, **kwargs)
+        self.grades["Anglais"] = matter_4_grade
+
+    cls.__init__ = new_init
+    return cls
+
+@add_matter_4
 class Student:
     def __init__(self, name, math, physics, it):
         self.name = name
@@ -136,3 +153,8 @@ for student in school_class.iter_matter_2():
 print("--- Parcours via l'itérateur (Matière 3) ---")
 for student in school_class.iter_matter_3():
     print(f"{student.name} : {student.grades['Informatique']}")
+
+# Vérification du décorateur de classe (Question récente)
+print("--- Vérification de la 4ème matière ajoutée par le décorateur ---")
+for student in school_class.students: # parcours brut
+    print(f"{student.name} a {student.grades.get('Anglais')} en Anglais. (Moyenne automatiquement recalculée à {student.average:.2f})")
