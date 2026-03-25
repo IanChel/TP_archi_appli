@@ -1,19 +1,47 @@
-class Etudiant:
-    def __init__(self, nom, note_mathematiques, note_physique, note_informatique):
-        self.nom = nom
-        self.notes = {
-            "Mathématiques": note_mathematiques,
-            "Physique": note_physique,
-            "Informatique": note_informatique
+class Student:
+    def __init__(self, name, math, physics, it):
+        self.name = name
+        self.grades = {
+            "Mathématiques": math,
+            "Physique": physics,
+            "Informatique": it
         }
-    
+
     @property
-    def moyenne(self):
-        return sum(self.notes.values()) / len(self.notes)
+    def average(self):
+        return sum(self.grades.values()) / len(self.grades)
 
-class GroupeEtudiants:
+
+class SchoolClass:
     def __init__(self):
-        self.etudiants = []
+        self.students = []
 
-    def ajouter_etudiant(self, etudiant):
-        self.etudiants.append(etudiant)
+    def add_student(self, student):
+        self.students.append(student)
+
+    def display_rankings(self):
+        if not self.students:
+            return
+
+        subjects = ["Mathématiques", "Physique", "Informatique"]
+        
+        for subject in subjects:
+            print(f"--- Classement en {subject} ---")
+            sorted_students = sorted(self.students, key=lambda s: s.grades[subject], reverse=True)
+            for student in sorted_students:
+                print(f"{student.name} : {student.grades[subject]}")
+            print()
+
+        print("--- Classement Général (Moyenne) ---")
+        sorted_avg = sorted(self.students, key=lambda s: s.average, reverse=True)
+        for student in sorted_avg:
+            print(f"{student.name} : {student.average:.2f}")
+
+
+school_class = SchoolClass()
+school_class.add_student(Student('J', 10, 12, 13))
+school_class.add_student(Student('A', 8, 2, 17))
+school_class.add_student(Student('V', 9, 14, 14))
+
+# Pour tester le bon fonctionnement de la proposition
+school_class.display_rankings()
