@@ -1,3 +1,5 @@
+from collections.abc import Iterable, Iterator
+
 class Student:
     def __init__(self, name, math, physics, it):
         self.name = name
@@ -12,12 +14,30 @@ class Student:
         return sum(self.grades.values()) / len(self.grades)
 
 
-class SchoolClass:
+class Matter1Iterator(Iterator):
+    def __init__(self, students):
+        # Trie la liste lors de l'initialisation de l'itérateur
+        self._sorted_students = sorted(students, key=lambda s: s.grades["Mathématiques"], reverse=True)
+        self._index = 0
+
+    def __next__(self):
+        if self._index < len(self._sorted_students):
+            student = self._sorted_students[self._index]
+            self._index += 1
+            return student
+        raise StopIteration
+
+
+class SchoolClass(Iterable):
     def __init__(self):
         self.students = []
 
     def add_student(self, student):
         self.students.append(student)
+
+    def __iter__(self):
+        # Renvoie l'itérateur de la matière 1
+        return Matter1Iterator(self.students)
 
     def display_rankings(self):
         if not self.students:
@@ -70,3 +90,8 @@ school_class.rank_matter_1()
 # Appels aux méthodes de la question 4
 school_class.rank_matter_2()
 school_class.rank_matter_3()
+
+# Parcours via l'itérateur (Question 5)
+print("--- Parcours via l'itérateur (Matière 1) ---")
+for student in school_class:
+    print(f"{student.name} : {student.grades['Mathématiques']}")
