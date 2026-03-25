@@ -37,6 +37,12 @@ class SchoolClass:
         for student in sorted_avg:
             print(f"{student.name} : {student.average:.2f}")
 
+    def rank_matter_1(self):
+        # Tri décroissant pour la 1ère matière listée (ici Mathématiques)
+        sorted_students = sorted(self.students, key=lambda s: s.grades["Mathématiques"], reverse=True)
+        for student in sorted_students:
+            print(f"{student.name} : {student.grades['Mathématiques']}")
+
 
 school_class = SchoolClass()
 school_class.add_student(Student('J', 10, 12, 13))
@@ -45,3 +51,6 @@ school_class.add_student(Student('V', 9, 14, 14))
 
 # Pour tester le bon fonctionnement de la proposition
 school_class.display_rankings()
+
+# Appel à la méthode de la question 3
+school_class.rank_matter_1()
