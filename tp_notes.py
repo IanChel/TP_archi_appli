@@ -28,6 +28,32 @@ class Matter1Iterator(Iterator):
         raise StopIteration
 
 
+class Matter2Iterator(Iterator):
+    def __init__(self, students):
+        self._sorted_students = sorted(students, key=lambda s: s.grades["Physique"], reverse=True)
+        self._index = 0
+
+    def __next__(self):
+        if self._index < len(self._sorted_students):
+            student = self._sorted_students[self._index]
+            self._index += 1
+            return student
+        raise StopIteration
+
+
+class Matter3Iterator(Iterator):
+    def __init__(self, students):
+        self._sorted_students = sorted(students, key=lambda s: s.grades["Informatique"], reverse=True)
+        self._index = 0
+
+    def __next__(self):
+        if self._index < len(self._sorted_students):
+            student = self._sorted_students[self._index]
+            self._index += 1
+            return student
+        raise StopIteration
+
+
 class SchoolClass(Iterable):
     def __init__(self):
         self.students = []
@@ -38,6 +64,12 @@ class SchoolClass(Iterable):
     def __iter__(self):
         # Renvoie l'itérateur de la matière 1
         return Matter1Iterator(self.students)
+
+    def iter_matter_2(self):
+        return Matter2Iterator(self.students)
+
+    def iter_matter_3(self):
+        return Matter3Iterator(self.students)
 
     def display_rankings(self):
         if not self.students:
@@ -95,3 +127,12 @@ school_class.rank_matter_3()
 print("--- Parcours via l'itérateur (Matière 1) ---")
 for student in school_class:
     print(f"{student.name} : {student.grades['Mathématiques']}")
+
+# Parcours via les nouveaux itérateurs (Question 6)
+print("--- Parcours via l'itérateur (Matière 2) ---")
+for student in school_class.iter_matter_2():
+    print(f"{student.name} : {student.grades['Physique']}")
+
+print("--- Parcours via l'itérateur (Matière 3) ---")
+for student in school_class.iter_matter_3():
+    print(f"{student.name} : {student.grades['Informatique']}")
