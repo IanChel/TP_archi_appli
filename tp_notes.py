@@ -95,8 +95,17 @@ def add_iter_matter_4(cls):
 
 @add_iter_matter_4
 class SchoolClass(Iterable):
+    _instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if not cls._instance:
+            cls._instance = super(SchoolClass, cls).__new__(cls)
+        return cls._instance
+
     def __init__(self):
-        self.students = []
+        # Initialise students seulement la première fois
+        if not hasattr(self, 'students'):
+            self.students = []
 
     def add_student(self, student):
         self.students.append(student)
@@ -186,3 +195,9 @@ for student in school_class.students: # parcours brut
 print("--- Parcours via l'itérateur injecté (Matière 4 - Anglais) ---")
 for student in school_class.iter_matter_4():
     print(f"{student.name} : {student.grades.get('Anglais')} en Anglais")
+
+# Vérification du Singleton (Dernière question)
+print("--- Vérification du Singleton ---")
+another_school_class = SchoolClass()
+print(f"Les deux instances sont-elles identiques ? {school_class is another_school_class}")
+print(f"Nombre d'élèves dans la 'nouvelle' instance : {len(another_school_class.students)}")
